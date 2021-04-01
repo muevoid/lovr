@@ -1,10 +1,10 @@
 #include "os.h"
-#include <string.h>
+#include <pwd.h>
+#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <pwd.h>
+#include <string.h>
 
 #include "os_glfw.h"
 
@@ -41,7 +41,7 @@ void os_sleep(double seconds) {
   struct timespec t;
   t.tv_sec = seconds;
   t.tv_nsec = (seconds - t.tv_sec) * NS_PER_SEC;
-  while (nanosleep(&t, &t));
+  while (nanosleep(&t, &t)) continue;
 }
 
 void os_request_permission(os_permission permission) {

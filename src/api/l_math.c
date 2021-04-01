@@ -1,12 +1,12 @@
 #include "api.h"
-#include "math/math.h"
 #include "math/curve.h"
+#include "math/math.h"
 #include "math/pool.h"
 #include "math/randomGenerator.h"
 #include "core/maf.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <stdlib.h>
 
 int l_lovrRandomGeneratorRandom(lua_State* L);
@@ -142,7 +142,7 @@ static int l_lovrMathNewCurve(lua_State* L) {
 
 static int l_lovrMathNewRandomGenerator(lua_State* L) {
   RandomGenerator* generator = lovrRandomGeneratorCreate();
-  if (lua_gettop(L) > 0){
+  if (lua_gettop(L) > 0) {
     Seed seed = { .b64 = luax_checkrandomseed(L, 1) };
     lovrRandomGeneratorSetSeed(generator, seed);
   }

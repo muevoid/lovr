@@ -4,9 +4,9 @@
 #include "core/util.h"
 #include "lib/noise1234/noise1234.h"
 #include <math.h>
-#include <string.h>
-#include <stdlib.h>
 #include <time.h>
+#include <stdlib.h>
+#include <string.h>
 
 static struct {
   bool initialized;

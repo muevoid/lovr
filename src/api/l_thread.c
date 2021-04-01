@@ -1,10 +1,10 @@
 #include "api.h"
 #include "event/event.h"
-#include "thread/thread.h"
 #include "thread/channel.h"
+#include "thread/thread.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <lualib.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,8 +51,7 @@ static int threadRunner(void* data) {
       memcpy(thread->error, error, length + 1);
       lovrEventPush((Event) {
         .type = EVENT_THREAD_ERROR,
-        .data.thread = { thread, thread->error }
-      });
+        .data.thread = { thread, thread->error } });
     }
   }
 

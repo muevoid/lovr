@@ -1,8 +1,10 @@
 #include "zip.h"
 #include <string.h>
 
+// clang-format off
 static uint16_t readu16(const uint8_t* p) { uint16_t x; memcpy(&x, p, sizeof(x)); return x; }
 static uint32_t readu32(const uint8_t* p) { uint32_t x; memcpy(&x, p, sizeof(x)); return x; }
+// clang-format on
 
 bool zip_open(zip_state* zip) {
   const uint8_t* p = zip->data + zip->size - 22;

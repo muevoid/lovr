@@ -4,8 +4,8 @@
 #include "data/sound.h"
 #include "core/maf.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <stdlib.h>
 
 StringEntry lovrEffect[] = {
@@ -70,14 +70,14 @@ static void onDevice(const void* id, size_t size, const char* name, bool isDefau
   lua_rawseti(L, -2, luax_len(L, -2) + 1);
 }
 
-static int l_lovrAudioGetDevices(lua_State *L) {
+static int l_lovrAudioGetDevices(lua_State* L) {
   AudioType type = luax_checkenum(L, 1, AudioType, "playback");
   lua_newtable(L);
   lovrAudioEnumerateDevices(type, onDevice, L);
   return 1;
 }
 
-static int l_lovrAudioSetDevice(lua_State *L) {
+static int l_lovrAudioSetDevice(lua_State* L) {
   AudioType type = luax_checkenum(L, 1, AudioType, "playback");
   void* id = lua_touserdata(L, 2);
   size_t size = id ? luax_len(L, 2) : 0;
@@ -158,7 +158,7 @@ static int l_lovrAudioSetOrientation(lua_State* L) {
   return 0;
 }
 
-static int l_lovrAudioGetPose(lua_State *L) {
+static int l_lovrAudioGetPose(lua_State* L) {
   float position[4], orientation[4], angle, ax, ay, az;
   lovrAudioGetPose(position, orientation);
   quat_getAngleAxis(orientation, &angle, &ax, &ay, &az);
@@ -172,7 +172,7 @@ static int l_lovrAudioGetPose(lua_State *L) {
   return 7;
 }
 
-static int l_lovrAudioSetPose(lua_State *L) {
+static int l_lovrAudioSetPose(lua_State* L) {
   int index = 1;
   float position[4], orientation[4];
   index = luax_readvec3(L, index, position, NULL);
@@ -197,7 +197,7 @@ static int l_lovrAudioSetGeometry(lua_State* L) {
   return 1;
 }
 
-static int l_lovrAudioGetSpatializer(lua_State *L) {
+static int l_lovrAudioGetSpatializer(lua_State* L) {
   lua_pushstring(L, lovrAudioGetSpatializer());
   return 1;
 }
@@ -282,7 +282,7 @@ int luaopen_lovr_audio(lua_State* L) {
   luax_registertype(L, Source);
 
   bool start = true;
-  const char *spatializer = NULL;
+  const char* spatializer = NULL;
   luax_pushconf(L);
   lua_getfield(L, -1, "audio");
   if (lua_istable(L, -1)) {

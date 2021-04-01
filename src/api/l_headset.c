@@ -1,12 +1,12 @@
 #include "api.h"
-#include "headset/headset.h"
 #include "data/modelData.h"
 #include "graphics/graphics.h"
 #include "graphics/model.h"
 #include "graphics/texture.h"
+#include "headset/headset.h"
 #include "core/maf.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <stdlib.h>
 
 StringEntry lovrHeadsetDriver[] = {
@@ -687,7 +687,7 @@ static int l_lovrHeadsetGetTime(lua_State* L) {
 }
 
 static int l_lovrHeadsetGetMirrorTexture(lua_State* L) {
-  Texture *texture = NULL;
+  Texture* texture = NULL;
   if (lovrHeadsetDisplayDriver->getMirrorTexture)
     texture = lovrHeadsetDisplayDriver->getMirrorTexture();
   luax_pushtype(L, Texture, texture);

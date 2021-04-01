@@ -4,24 +4,24 @@
 #include <GLFW/glfw3.h>
 
 #ifndef EMSCRIPTEN
-#  ifdef _WIN32
-#    define GLFW_EXPOSE_NATIVE_WIN32
-#    define GLFW_EXPOSE_NATIVE_WGL
-#  endif
-#  ifdef _WIN32
-#    define GLFW_EXPOSE_NATIVE_WIN32
-#    define GLFW_EXPOSE_NATIVE_WGL
-#  endif
-#  ifdef LOVR_LINUX_EGL
-#    define EGL_NO_X11
-#    include <EGL/egl.h>
-#    define GLFW_EXPOSE_NATIVE_EGL
-#  endif
-#  ifdef LOVR_LINUX_X11
-#    define GLFW_EXPOSE_NATIVE_X11
-#    define GLFW_EXPOSE_NATIVE_GLX
-#  endif
-#  include <GLFW/glfw3native.h>
+#ifdef _WIN32
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#endif
+#ifdef _WIN32
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#endif
+#ifdef LOVR_LINUX_EGL
+#define EGL_NO_X11
+#include <EGL/egl.h>
+#define GLFW_EXPOSE_NATIVE_EGL
+#endif
+#ifdef LOVR_LINUX_X11
+#define GLFW_EXPOSE_NATIVE_X11
+#define GLFW_EXPOSE_NATIVE_GLX
+#endif
+#include <GLFW/glfw3native.h>
 #endif
 
 static struct {
@@ -209,7 +209,6 @@ bool os_window_open(const os_window_config* config) {
     return false;
   }
 
-
 #ifdef LOVR_LINUX_EGL
   glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 #endif
@@ -244,11 +243,13 @@ bool os_window_open(const os_window_config* config) {
   }
 
   if (config->icon.data) {
-    glfwSetWindowIcon(glfwState.window, 1, &(GLFWimage) {
+    GLFWimage icon = {
       .pixels = config->icon.data,
       .width = config->icon.width,
       .height = config->icon.height
-    });
+    };
+
+    glfwSetWindowIcon(glfwState.window, 1, &icon);
   }
 
   glfwMakeContextCurrent(glfwState.window);
@@ -371,13 +372,15 @@ EGLConfig os_get_egl_config() {
   EGLint cfg_id = -1;
   EGLint num_cfgs = -1;
   EGLConfig cfg = NULL;
-  PFNEGLQUERYCONTEXTPROC eglQueryContext = (PFNEGLQUERYCONTEXTPROC)glfwGetProcAddress("eglQueryContext");
-  PFNEGLCHOOSECONFIGPROC eglChooseConfig = (PFNEGLCHOOSECONFIGPROC)glfwGetProcAddress("eglChooseConfig");
+  PFNEGLQUERYCONTEXTPROC eglQueryContext = (PFNEGLQUERYCONTEXTPROC) glfwGetProcAddress("eglQueryContext");
+  PFNEGLCHOOSECONFIGPROC eglChooseConfig = (PFNEGLCHOOSECONFIGPROC) glfwGetProcAddress("eglChooseConfig");
 
   eglQueryContext(dpy, ctx, EGL_CONFIG_ID, &cfg_id);
-  EGLint attrs [4] = {
-    EGL_CONFIG_ID, cfg_id,
-    EGL_NONE, EGL_NONE,
+  EGLint attrs[4] = {
+    EGL_CONFIG_ID,
+    cfg_id,
+    EGL_NONE,
+    EGL_NONE,
   };
   eglChooseConfig(dpy, attrs, &cfg, 1, &num_cfgs);
   return cfg;

@@ -1,7 +1,7 @@
 #include "util.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdatomic.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Error handling
 static void defaultErrorCallback(void* p, const char* format, va_list args) {
@@ -61,7 +61,7 @@ void lovrRelease(void* object, void (*destructor)(void*)) {
 
 // UTF-8
 // https://github.com/starwing/luautf8
-size_t utf8_decode(const char *s, const char *e, unsigned *pch) {
+size_t utf8_decode(const char* s, const char* e, unsigned* pch) {
   unsigned ch;
 
   if (s >= e) {
@@ -69,29 +69,28 @@ size_t utf8_decode(const char *s, const char *e, unsigned *pch) {
     return 0;
   }
 
-  ch = (unsigned char)s[0];
+  ch = (unsigned char) s[0];
   if (ch < 0xC0) goto fallback;
   if (ch < 0xE0) {
-    if (s+1 >= e || (s[1] & 0xC0) != 0x80)
+    if (s + 1 >= e || (s[1] & 0xC0) != 0x80)
       goto fallback;
-    *pch = ((ch   & 0x1F) << 6) |
-            (s[1] & 0x3F);
+    *pch = ((ch & 0x1F) << 6) |
+           (s[1] & 0x3F);
     return 2;
   }
   if (ch < 0xF0) {
-    if (s+2 >= e || (s[1] & 0xC0) != 0x80
-                 || (s[2] & 0xC0) != 0x80)
+    if (s + 2 >= e || (s[1] & 0xC0) != 0x80 || (s[2] & 0xC0) != 0x80)
       goto fallback;
-    *pch = ((ch   & 0x0F) << 12) |
-           ((s[1] & 0x3F) <<  6) |
-            (s[2] & 0x3F);
+    *pch = ((ch & 0x0F) << 12) |
+           ((s[1] & 0x3F) << 6) |
+           (s[2] & 0x3F);
     return 3;
   }
   {
     int count = 0; /* to count number of continuation bytes */
     unsigned res = 0;
     while ((ch & 0x40) != 0) { /* still have continuation bytes? */
-      int cc = (unsigned char)s[++count];
+      int cc = (unsigned char) s[++count];
       if ((cc & 0xC0) != 0x80) /* not a continuation byte? */
         goto fallback; /* invalid byte sequence, fallback */
       res = (res << 6) | (cc & 0x3F); /* add lower 6 bits from cont. byte */
@@ -101,7 +100,7 @@ size_t utf8_decode(const char *s, const char *e, unsigned *pch) {
       goto fallback; /* invalid byte sequence */
     res |= ((ch & 0x7F) << (count * 5)); /* add first byte */
     *pch = res;
-    return count+1;
+    return count + 1;
   }
 
 fallback:

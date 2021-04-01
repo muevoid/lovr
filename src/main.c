@@ -1,14 +1,16 @@
-#include "resources/boot.lua.h"
 #include "api/api.h"
+#include "audio/audio.h"
 #include "event/event.h"
 #include "core/os.h"
 #include "core/util.h"
-#include <lua.h>
+#include "resources/boot.lua.h"
+#include "lib/miniaudio/miniaudio.h"
 #include <lauxlib.h>
+#include <lua.h>
 #include <lualib.h>
 #include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>

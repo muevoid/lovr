@@ -1,8 +1,8 @@
 #include "api.h"
 #include "data/rasterizer.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 
 static int l_lovrRasterizerGetHeight(lua_State* L) {
   Rasterizer* rasterizer = luax_checktype(L, 1, Rasterizer);

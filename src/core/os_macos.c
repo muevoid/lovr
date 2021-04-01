@@ -1,14 +1,14 @@
 #include "os.h"
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#include <objc/objc-runtime.h>
 #include <mach-o/dyld.h>
 #include <mach/mach_time.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
+#include <objc/objc-runtime.h>
 #include <pwd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/sysctl.h>
+#include <sys/types.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "os_glfw.h"
 
@@ -49,7 +49,7 @@ void os_sleep(double seconds) {
   struct timespec t;
   t.tv_sec = seconds;
   t.tv_nsec = (seconds - t.tv_sec) * 1e9;
-  while (nanosleep(&t, &t));
+  while (nanosleep(&t, &t)) continue;
 }
 
 void os_request_permission(os_permission permission) {
@@ -113,7 +113,7 @@ size_t os_get_bundle_path(char* buffer, size_t size, const char** root) {
     return 0;
   }
 
-  const char* cpath = ((const char*(*)(id, SEL)) objc_msgSend)(path, sel_registerName("UTF8String"));
+  const char* cpath = ((const char* (*) (id, SEL)) objc_msgSend)(path, sel_registerName("UTF8String"));
   if (!cpath) {
     return 0;
   }

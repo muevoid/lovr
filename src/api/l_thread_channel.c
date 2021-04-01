@@ -1,9 +1,9 @@
 #include "api.h"
-#include "thread/channel.h"
 #include "event/event.h"
+#include "thread/channel.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <math.h>
 
 static void luax_checktimeout(lua_State* L, int index, double* timeout) {

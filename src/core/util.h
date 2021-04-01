@@ -26,10 +26,12 @@
 #define MAX(a, b) (a > b ? a : b)
 #define MIN(a, b) (a < b ? a : b)
 #define CLAMP(x, min, max) MAX(min, MIN(max, x))
-#define ALIGN(p, n) (((uintptr_t) (p) + (n - 1)) & ~(n - 1))
-#define CHECK_SIZEOF(T) int(*_o)[sizeof(T)]=1
+#define ALIGN(p, n) (((uintptr_t)(p) + (n - 1)) & ~(n - 1))
+#define CHECK_SIZEOF(T) int(*_o)[sizeof(T)] = 1
 
-typedef struct Color { float r, g, b, a; } Color;
+typedef struct Color {
+  float r, g, b, a;
+} Color;
 
 // Error handling
 typedef void errorFn(void*, const char*, va_list);
@@ -37,11 +39,15 @@ extern LOVR_THREAD_LOCAL errorFn* lovrErrorCallback;
 extern LOVR_THREAD_LOCAL void* lovrErrorUserdata;
 void lovrSetErrorCallback(errorFn* callback, void* userdata);
 void LOVR_NORETURN lovrThrow(const char* format, ...);
+// clang-format off
 #define lovrAssert(c, ...) if (!(c)) { lovrThrow(__VA_ARGS__); }
+// clang-format on
 
 // Logging
 typedef void logFn(void*, int, const char*, const char*, va_list);
+// clang-format off
 enum { LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR };
+// clang-format on
 void lovrSetLogCallback(logFn* callback, void* userdata);
 void lovrLog(int level, const char* tag, const char* format, ...);
 
@@ -60,6 +66,7 @@ void lovrRetain(void* ref);
 void lovrRelease(void* ref, void (*destructor)(void*));
 
 // Dynamic Array
+// clang-format off
 typedef void* arr_allocator(void* data, size_t size);
 #define arr_t(T) struct { T* data; arr_allocator* alloc; size_t length, capacity; }
 #define arr_init(a, allocator) (a)->data = NULL, (a)->length = 0, (a)->capacity = 0, (a)->alloc = allocator
@@ -71,6 +78,7 @@ typedef void* arr_allocator(void* data, size_t size);
 #define arr_append(a, p, n) arr_reserve(a, (a)->length + n), memcpy((a)->data + (a)->length, p, n * sizeof(*(p))), (a)->length += n
 #define arr_splice(a, i, n) memmove((a)->data + (i), (a)->data + ((i) + n), ((a)->length - (i) - (n)) * sizeof(*(a)->data)), (a)->length -= n
 #define arr_clear(a) (a)->length = 0
+// clang-format on
 
 static inline void _arr_reserve(void** data, size_t n, size_t* capacity, size_t stride, arr_allocator* allocator) {
   if (*capacity >= n) return;
@@ -81,5 +89,5 @@ static inline void _arr_reserve(void** data, size_t n, size_t* capacity, size_t 
 }
 
 // UTF-8
-size_t utf8_decode(const char *s, const char *e, unsigned *pch);
+size_t utf8_decode(const char* s, const char* e, unsigned* pch);
 void utf8_encode(uint32_t codepoint, char str[4]);

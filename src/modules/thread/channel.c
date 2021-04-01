@@ -2,9 +2,9 @@
 #include "event/event.h"
 #include "core/util.h"
 #include "lib/tinycthread/tinycthread.h"
-#include <stdlib.h>
-#include <stddef.h>
 #include <math.h>
+#include <stddef.h>
+#include <stdlib.h>
 
 struct Channel {
   uint32_t ref;

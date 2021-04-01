@@ -1,11 +1,11 @@
 #include "api.h"
 #include "data/blob.h"
+#include "data/image.h"
 #include "data/modelData.h"
 #include "data/rasterizer.h"
 #include "data/sound.h"
-#include "data/image.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <stdlib.h>
 #include <string.h>
 

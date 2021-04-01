@@ -1,11 +1,11 @@
 #include "api.h"
-#include "filesystem/filesystem.h"
 #include "data/blob.h"
+#include "filesystem/filesystem.h"
 #include "core/fs.h"
 #include "core/os.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -109,7 +109,6 @@ static int l_lovrFilesystemGetAppdataDirectory(lua_State* L) {
 
   return 1;
 }
-
 
 static int l_lovrFilesystemGetDirectoryItems(lua_State* L) {
   const char* path = luaL_checkstring(L, 1);

@@ -1,8 +1,8 @@
 #include "api.h"
 #include "physics/physics.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 
 void luax_pushshape(lua_State* L, Shape* shape) {
   switch (shape->type) {
@@ -92,6 +92,7 @@ static int l_lovrShapeGetUserData(lua_State* L) {
 static int l_lovrShapeSetUserData(lua_State* L) {
   Shape* shape = luax_checkshape(L, 1);
   union { int i; void* p; } ref = { .p = lovrShapeGetUserData(shape) };
+
   if (ref.i) {
     luaL_unref(L, LUA_REGISTRYINDEX, ref.i);
   }
@@ -174,6 +175,7 @@ static int l_lovrShapeGetAABB(lua_State* L) {
   return 6;
 }
 
+// clang-format off
 #define lovrShape \
   { "destroy", l_lovrShapeDestroy }, \
   { "getType", l_lovrShapeGetType }, \
@@ -190,6 +192,7 @@ static int l_lovrShapeGetAABB(lua_State* L) {
   { "setOrientation", l_lovrShapeSetOrientation }, \
   { "getMass", l_lovrShapeGetMass }, \
   { "getAABB", l_lovrShapeGetAABB }
+// clang-format on
 
 static int l_lovrSphereShapeGetRadius(lua_State* L) {
   SphereShape* sphere = luax_checktype(L, 1, SphereShape);

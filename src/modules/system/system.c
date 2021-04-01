@@ -9,8 +9,7 @@ static void onKeyboardEvent(os_button_action action, os_key key, uint32_t scanco
     .type = action == BUTTON_PRESSED ? EVENT_KEYPRESSED : EVENT_KEYRELEASED,
     .data.key.code = key,
     .data.key.scancode = scancode,
-    .data.key.repeat = repeat
-  });
+    .data.key.repeat = repeat });
 }
 
 static void onTextEvent(uint32_t codepoint) {

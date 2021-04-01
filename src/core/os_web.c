@@ -1,9 +1,9 @@
 #include "os.h"
 #include <emscripten.h>
-#include <emscripten/html5.h>
 #include <emscripten/dom_pk_codes.h>
-#include <string.h>
+#include <emscripten/html5.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #define CANVAS "#canvas"

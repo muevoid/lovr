@@ -2,8 +2,8 @@
 #include "audio/audio.h"
 #include "core/maf.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 
 static int l_lovrSourceClone(lua_State* L) {
   Source* source = luax_checktype(L, 1, Source);
@@ -158,7 +158,7 @@ static int l_lovrSourceGetPose(lua_State* L) {
   return 7;
 }
 
-static int l_lovrSourceSetPose(lua_State *L) {
+static int l_lovrSourceSetPose(lua_State* L) {
   Source* source = luax_checktype(L, 1, Source);
   float position[4], orientation[4];
   int index = 2;

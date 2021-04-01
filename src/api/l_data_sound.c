@@ -1,9 +1,9 @@
 #include "api.h"
-#include "data/sound.h"
 #include "data/blob.h"
+#include "data/sound.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 
 StringEntry lovrSampleFormat[] = {
   [SAMPLE_F32] = ENTRY("f32"),

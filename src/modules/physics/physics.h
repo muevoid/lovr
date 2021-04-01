@@ -1,8 +1,8 @@
 #include "core/maf.h"
 #include "core/util.h"
-#include <stdint.h>
-#include <stdbool.h>
 #include <ode/ode.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 #pragma once
 

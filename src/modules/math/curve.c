@@ -1,8 +1,8 @@
 #include "math/curve.h"
 #include "core/maf.h"
 #include "core/util.h"
-#include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
 
 struct Curve {
   uint32_t ref;

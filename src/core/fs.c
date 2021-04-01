@@ -15,9 +15,18 @@ bool fs_open(const char* path, OpenMode mode, fs_handle* file) {
   DWORD access;
   DWORD creation;
   switch (mode) {
-    case OPEN_READ: access = GENERIC_READ; creation = OPEN_EXISTING; break;
-    case OPEN_WRITE: access = GENERIC_WRITE; creation = CREATE_ALWAYS; break;
-    case OPEN_APPEND: access = GENERIC_WRITE; creation = OPEN_ALWAYS; break;
+    case OPEN_READ:
+      access = GENERIC_READ;
+      creation = OPEN_EXISTING;
+      break;
+    case OPEN_WRITE:
+      access = GENERIC_WRITE;
+      creation = CREATE_ALWAYS;
+      break;
+    case OPEN_APPEND:
+      access = GENERIC_WRITE;
+      creation = OPEN_ALWAYS;
+      break;
     default: return false;
   }
 
@@ -168,11 +177,11 @@ bool fs_list(const char* path, fs_list_cb* callback, void* context) {
 #else // !_WIN32
 
 #include "fs.h"
+#include <dirent.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include <limits.h>
 #include <unistd.h>
 
 bool fs_open(const char* path, OpenMode mode, fs_handle* file) {

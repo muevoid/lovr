@@ -1,7 +1,7 @@
-#include <stdbool.h>
-#include <stdint.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #pragma once
 
@@ -15,7 +15,7 @@ typedef struct {
   char string[31];
 } StringEntry;
 
-#define ENTRY(s) { sizeof(s) - 1, s }
+#define ENTRY(s) ({ sizeof(s) - 1, s })
 
 extern StringEntry lovrArcMode[];
 extern StringEntry lovrAttributeType[];
@@ -80,12 +80,12 @@ typedef struct {
 #define LUA_RIDX_MAINTHREAD 1
 #endif
 
-#define luax_registertype(L, T) _luax_registertype(L, #T, lovr ## T, lovr ## T ## Destroy)
+#define luax_registertype(L, T) _luax_registertype(L, #T, lovr##T, lovr##T##Destroy)
 #define luax_totype(L, i, T) (T*) _luax_totype(L, i, hash64(#T, sizeof(#T) - 1))
 #define luax_checktype(L, i, T) (T*) _luax_checktype(L, i, hash64(#T, sizeof(#T) - 1), #T)
 #define luax_pushtype(L, T, o) _luax_pushtype(L, #T, hash64(#T, sizeof(#T) - 1), o)
-#define luax_checkenum(L, i, T, x) _luax_checkenum(L, i, lovr ## T, x, #T)
-#define luax_pushenum(L, T, x) lua_pushlstring(L, (lovr ## T)[x].string, (lovr ## T)[x].length)
+#define luax_checkenum(L, i, T, x) _luax_checkenum(L, i, lovr##T, x, #T)
+#define luax_pushenum(L, T, x) lua_pushlstring(L, (lovr##T)[x].string, (lovr##T)[x].length)
 #define luax_checkfloat(L, i) (float) luaL_checknumber(L, i)
 #define luax_optfloat(L, i, x) (float) luaL_optnumber(L, i, x)
 #define luax_geterror(L) lua_getfield(L, LUA_REGISTRYINDEX, "_lovrerror")

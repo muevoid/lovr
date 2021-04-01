@@ -1,5 +1,5 @@
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 typedef struct Curve Curve;
 Curve* lovrCurveCreate(void);

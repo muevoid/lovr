@@ -1,11 +1,11 @@
 #include "os.h"
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <pthread.h>
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
 
 // This is probably bad, but makes things easier to build
 #include <android_native_app_glue.c>
@@ -231,7 +231,7 @@ void os_sleep(double seconds) {
   struct timespec t;
   t.tv_sec = seconds;
   t.tv_nsec = (seconds - t.tv_sec) * NS_PER_SEC;
-  while (nanosleep(&t, &t));
+  while (nanosleep(&t, &t)) continue;
 }
 
 JNIEXPORT void JNICALL Java_org_lovr_app_Activity_lovrPermissionEvent(JNIEnv* jni, jobject activity, jint permission, jboolean granted) {

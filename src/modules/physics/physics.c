@@ -1,7 +1,7 @@
 #include "physics.h"
 #include "core/util.h"
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 static void defaultNearCallback(void* data, dGeomID a, dGeomID b) {
   lovrWorldCollide((World*) data, dGeomGetData(a), dGeomGetData(b), -1, -1);

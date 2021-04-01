@@ -1,9 +1,9 @@
 #include "math/randomGenerator.h"
 #include "core/util.h"
+#include <inttypes.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
 
 struct RandomGenerator {
   uint32_t ref;
@@ -78,7 +78,9 @@ double lovrRandomGeneratorRandom(RandomGenerator* generator) {
   generator->state.b64 ^= (generator->state.b64 << 25);
   generator->state.b64 ^= (generator->state.b64 >> 27);
   uint64_t r = generator->state.b64 * 2685821657736338717ULL;
+  // clang-format off
   union { uint64_t i; double d; } u;
+  // clang-format on
   u.i = ((0x3FFULL) << 52) | (r >> 12);
   return u.d - 1.;
 }

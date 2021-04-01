@@ -50,8 +50,7 @@ Vector lovrPoolAllocate(Pool* pool, VectorType type, float** data) {
     .handle = {
       .type = type,
       .generation = (uint8_t) pool->generation,
-      .index = (uint16_t) pool->cursor
-    }
+      .index = (uint16_t) pool->cursor }
   };
 
   *data = pool->data + pool->cursor;

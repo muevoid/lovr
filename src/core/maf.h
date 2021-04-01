@@ -1,6 +1,6 @@
-#include <string.h>
-#include <math.h>
 #include <float.h>
+#include <math.h>
+#include <string.h>
 
 #pragma once
 
@@ -82,8 +82,7 @@ MAF vec3 vec3_cross(vec3 v, const vec3 u) {
   return vec3_set(v,
     v[1] * u[2] - v[2] * u[1],
     v[2] * u[0] - v[0] * u[2],
-    v[0] * u[1] - v[1] * u[0]
-  );
+    v[0] * u[1] - v[1] * u[0]);
 }
 
 MAF vec3 vec3_lerp(vec3 v, const vec3 u, float t) {
@@ -166,8 +165,7 @@ MAF quat quat_mul(quat out, quat q, quat r) {
     q[0] * r[3] + q[3] * r[0] + q[1] * r[2] - q[2] * r[1],
     q[1] * r[3] + q[3] * r[1] + q[2] * r[0] - q[0] * r[2],
     q[2] * r[3] + q[3] * r[2] + q[0] * r[1] - q[1] * r[0],
-    q[3] * r[3] - q[0] * r[0] - q[1] * r[1] - q[2] * r[2]
-  );
+    q[3] * r[3] - q[0] * r[0] - q[1] * r[1] - q[2] * r[2]);
 }
 
 MAF float quat_length(quat q) {
@@ -285,7 +283,9 @@ MAF quat quat_between(quat q, vec3 u, vec3 v) {
 
 // mat4
 
-#define MAT4_IDENTITY { 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1 }
+// clang-format off
+#define MAT4_IDENTITY { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
+// clang-format on
 
 #define mat4_init mat4_set
 MAF mat4 mat4_set(mat4 m, mat4 n) {
@@ -607,12 +607,14 @@ MAF mat4 mat4_fov(mat4 m, float left, float right, float up, float down, float c
 }
 
 MAF void mat4_getFov(mat4 m, float* left, float* right, float* up, float* down) {
+  // clang-format off
   float v[4][4] = {
     {  1.f,  0.f, 0.f, 1.f },
     { -1.f,  0.f, 0.f, 1.f },
     {  0.f, -1.f, 0.f, 1.f },
     {  0.f,  1.f, 0.f, 1.f }
   };
+  // clang-format on
 
   float transpose[16];
   mat4_init(transpose, m);

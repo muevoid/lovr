@@ -1,10 +1,10 @@
 #include "api.h"
 #include "core/os.h"
 #include "core/util.h"
-#include <lua.h>
 #include <lauxlib.h>
-#include <stdlib.h>
+#include <lua.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 #ifndef LOVR_DISABLE_GRAPHICS
 #include "graphics/model.h"
@@ -333,7 +333,7 @@ void luax_traceback(lua_State* L, lua_State* T, const char* message, int level) 
   lua_call(L, 3, 1);
 }
 
-int luax_getstack(lua_State *L) {
+int luax_getstack(lua_State* L) {
   luax_traceback(L, L, lua_tostring(L, 1), 2);
   return 1;
 }
@@ -350,7 +350,7 @@ int luax_setconf(lua_State* L) {
   return 0;
 }
 
-void luax_setmainthread(lua_State *L) {
+void luax_setmainthread(lua_State* L) {
 #if LUA_VERSION_NUM < 502
   lua_pushthread(L);
   lua_rawseti(L, LUA_REGISTRYINDEX, LUA_RIDX_MAINTHREAD);
