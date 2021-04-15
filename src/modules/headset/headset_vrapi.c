@@ -47,6 +47,7 @@ static struct {
   ovrHandSkeleton skeleton[2];
   ovrInputCapabilityHeader hands[2];
   ovrInputStateTrackedRemote input[2];
+  ovrInputStateHand handInput[2];
   uint32_t changedButtons[2];
   float hapticStrength[2];
   float hapticDuration[2];
@@ -190,40 +191,51 @@ static const float* vrapi_getBoundsGeometry(uint32_t* count) {
 }
 
 static bool vrapi_getPose(Device device, float* position, float* orientation) {
-  if (device != DEVICE_HAND_LEFT && device != DEVICE_HAND_RIGHT && device != DEVICE_HEAD) {
-    return false;
-  }
+  uint32_t index;
+  switch (device) {
+    case DEVICE_HAND_LEFT_POINT:
+    case DEVICE_HAND_RIGHT_POINT:
+      index = device - DEVICE_HAND_LEFT_POINT;
+      if (state.hands[index].Type == ovrControllerType_Hand) {
+        ovrPosef* pose = &state.handInput[index].PointerPose;
+        vec3_set(position, pose->Position.x, pose->Position.y + state.offset, pose->Position.z);
+        quat_init(orientation, &pose->Orientation.x);
+        return state.handPose[index].HandConfidence == ovrConfidence_HIGH;
+      }
+      return false;
 
-  ovrPosef* pose;
-  bool valid;
+    case DEVICE_HAND_LEFT:
+    case DEVICE_HAND_RIGHT:
+      index = device - DEVICE_HAND_LEFT;
+      if (state.hands[index].Type == ovrControllerType_Hand) {
+        ovrPosef* pose = &state.handPose[index].RootPose;
+        vec3_set(position, pose->Position.x, pose->Position.y + state.offset, pose->Position.z);
+        quat_init(orientation, &pose->Orientation.x);
 
-  uint32_t index = device - DEVICE_HAND_LEFT;
-  if (index < 2 && state.hands[index].Type == ovrControllerType_Hand) {
-    pose = &state.handPose[index].RootPose;
-    valid = state.handPose[index].HandConfidence == ovrConfidence_HIGH;
-  } else {
-    ovrTracking* tracking = &state.tracking[device];
-    pose = &tracking->HeadPose.Pose;
-    valid = tracking->Status & (VRAPI_TRACKING_STATUS_POSITION_VALID | VRAPI_TRACKING_STATUS_ORIENTATION_VALID);
-  }
+        // Apply rotation adjustment to make hands face -Z
+        float rotation[4];
+        if (device == DEVICE_HAND_LEFT) {
+          float q[4];
+          quat_fromAngleAxis(rotation, (float) M_PI, 0.f, 0.f, 1.f);
+          quat_mul(rotation, rotation, quat_fromAngleAxis(q, (float) M_PI / 2.f, 0.f, 1.f, 0.f));
+        } else if (device == DEVICE_HAND_RIGHT) {
+          quat_fromAngleAxis(rotation, (float) M_PI / 2.f, 0.f, 1.f, 0.f);
+        }
+        quat_mul(orientation, orientation, rotation);
 
-  vec3_set(position, pose->Position.x, pose->Position.y + state.offset, pose->Position.z);
-  quat_init(orientation, &pose->Orientation.x);
-
-  // Make tracked hands face -Z
-  if (index < 2 && state.hands[index].Type == ovrControllerType_Hand) {
-    float rotation[4];
-    if (device == DEVICE_HAND_LEFT) {
-      float q[4];
-      quat_fromAngleAxis(rotation, (float) M_PI, 0.f, 0.f, 1.f);
-      quat_mul(rotation, rotation, quat_fromAngleAxis(q, (float) M_PI / 2.f, 0.f, 1.f, 0.f));
-    } else if (device == DEVICE_HAND_RIGHT) {
-      quat_fromAngleAxis(rotation, (float) M_PI / 2.f, 0.f, 1.f, 0.f);
+        return state.handPose[index].HandConfidence == ovrConfidence_HIGH;
+      }
+    // fallthrough
+    case DEVICE_HEAD: {
+      ovrTracking* tracking = &state.tracking[device];
+      ovrPosef* pose = &tracking->HeadPose.Pose;
+      vec3_set(position, pose->Position.x, pose->Position.y + state.offset, pose->Position.z);
+      quat_init(orientation, &pose->Orientation.x);
+      return tracking->Status & (VRAPI_TRACKING_STATUS_POSITION_VALID | VRAPI_TRACKING_STATUS_ORIENTATION_VALID);
     }
-    quat_mul(orientation, orientation, rotation);
-  }
 
-  return valid;
+    default: return false;
+  }
 }
 
 static bool vrapi_getVelocity(Device device, float* velocity, float* angularVelocity) {
@@ -297,6 +309,13 @@ static bool vrapi_isTouched(Device device, DeviceButton button, bool* touched) {
 static bool vrapi_getAxis(Device device, DeviceAxis axis, float* value) {
   if (device != DEVICE_HAND_LEFT && device != DEVICE_HAND_RIGHT) {
     return false;
+  }
+
+  uint32_t index = device - DEVICE_HAND_LEFT;
+
+  if (state.hands[index].Type == ovrControllerType_Hand && axis == AXIS_TRIGGER) {
+    value[0] = state.handInput[index].PinchStrength[ovrHandPinchStrength_Index];
+    return state.handPose[index].HandConfidence == ovrConfidence_HIGH;
   }
 
   ovrInputStateTrackedRemote* input = &state.input[device - DEVICE_HAND_LEFT];
@@ -790,6 +809,9 @@ static void vrapi_update(float dt) {
 
         state.handPose[i].Header.Version = ovrHandVersion_1;
         vrapi_GetHandPose(state.session, header->DeviceID, state.displayTime, &state.handPose[i].Header);
+
+        state.handInput[i].Header.ControllerType = header->Type;
+        vrapi_GetCurrentInputState(state.session, header->DeviceID, &state.handInput[i].Header);
         break;
 
       default: break;
