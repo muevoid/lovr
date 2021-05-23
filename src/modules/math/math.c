@@ -2,7 +2,8 @@
 #include "math/randomGenerator.h"
 #include "core/maf.h"
 #include "core/util.h"
-#include "lib/noise1234/noise1234.h"
+#define STB_PERLIN_IMPLEMENTATION
+#include "lib/stb/stb_perlin.h"
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -47,18 +48,18 @@ float lovrMathLinearToGamma(float x) {
   }
 }
 
-float lovrMathNoise1(float x) {
-  return noise1(x) * .5f + .5f;
+float lovrMathNoise1(float x, int seed) {
+  return stb_perlin_noise3(x, 0, 0, 0, 0, 0, seed);
 }
 
-float lovrMathNoise2(float x, float y) {
-  return noise2(x, y) * .5f + .5f;
+float lovrMathNoise2(float x, float y, int seed) {
+  return stb_perlin_noise3(x, y, 0, 0, 0, 0, seed);
 }
 
-float lovrMathNoise3(float x, float y, float z) {
-  return noise3(x, y, z) * .5f + .5f;
+float lovrMathNoise3(float x, float y, float z, int seed) {
+  return stb_perlin_noise3(x, y, z, 0, 0, 0, seed);
 }
 
-float lovrMathNoise4(float x, float y, float z, float w) {
-  return noise4(x, y, z, w) * .5f + .5f;
+float lovrFractalNoise(float x, float y, float z, float lacunarity, float gain, float offset, int octaves) {
+  return stb_perlin_ridge_noise3(x, y, z, lacunarity, gain, offset, octaves);
 }

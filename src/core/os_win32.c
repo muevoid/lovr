@@ -8,6 +8,17 @@
 
 #include "os_glfw.h"
 
+#ifdef _WIN32
+#	define LOVR_EXPORT __declspec(dllexport)
+#else
+#	define LOVR_EXPORT
+#endif
+
+#ifdef _WIN32
+  LOVR_EXPORT DWORD NvOptimusEnablement = 1;
+  LOVR_EXPORT DWORD AmdPowerXpressRequestHighPerformance = 1;
+#endif
+
 static uint64_t frequency;
 
 int main(int argc, char** argv);

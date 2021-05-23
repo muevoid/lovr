@@ -154,13 +154,19 @@ static int l_lovrMathNewRandomGenerator(lua_State* L) {
 static int l_lovrMathNoise(lua_State* L) {
   switch (lua_gettop(L)) {
     case 0:
-    case 1: lua_pushnumber(L, lovrMathNoise1(luax_checkfloat(L, 1))); return 1;
-    case 2: lua_pushnumber(L, lovrMathNoise2(luax_checkfloat(L, 1), luax_checkfloat(L, 2))); return 1;
-    case 3: lua_pushnumber(L, lovrMathNoise3(luax_checkfloat(L, 1), luax_checkfloat(L, 2), luax_checkfloat(L, 3))); return 1;
-    case 4:
+    case 1: lua_pushnumber(L, lovrMathNoise1(luax_checkfloat(L, 1), luaL_checknumber(L, 2))); return 1;
+    case 2: lua_pushnumber(L, lovrMathNoise2(luax_checkfloat(L, 1), luax_checkfloat(L, 2), luaL_checknumber(L, 3))); return 1;
+    case 3: 
     default:
-      lua_pushnumber(L, lovrMathNoise4(luax_checkfloat(L, 1), luax_checkfloat(L, 2), luax_checkfloat(L, 3), luax_checkfloat(L, 4)));
+      lua_pushnumber(L, lovrMathNoise3(luax_checkfloat(L, 1), luax_checkfloat(L, 2), luax_checkfloat(L, 3), luaL_checknumber(L, 4)));
       return 1;
+  }
+}
+
+static int l_lovrMathFractalNoise(lua_State* L) {
+  if(lua_gettop(L) > 0) {
+    lua_pushnumber(L, lovrFractalNoise(luax_checkfloat(L, 1), luax_checkfloat(L, 2), luax_checkfloat(L, 3), luax_checkfloat(L, 4), luax_checkfloat(L, 5), luax_checkfloat(L, 6), luax_checkfloat(L, 7)));
+    return 1;
   }
 }
 
