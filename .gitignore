@@ -1,15 +1,16 @@
 .DS_Store
 .vs
+.vscode
 .tup
 .obj
 bin
 build*
-plugins
 *.*.h
 *.lua
 *.config
 Activity*.java
 AndroidManifest*.xml
 deps/VrApi
+deps/vrapi
 deps/pico
 deps/OpenXR-Oculus
