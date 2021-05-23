@@ -358,7 +358,7 @@ else()
   return()
 endif()
 
-set_target_properties(lovr PROPERTIES C_VISIBILITY_PRESET hidden)
+set_target_properties(lovr PROPERTIES C_VISIBILITY_PRESET visible)
 set_target_properties(lovr PROPERTIES C_STANDARD 99)
 target_include_directories(lovr PRIVATE src src/modules src/lib/stdatomic)
 target_link_libraries(lovr
